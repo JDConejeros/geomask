@@ -1,6 +1,6 @@
-# Plan de Trabajo: `spatmask` — Spatial Geomasking and Anonymization Tools for R
+# Plan de Trabajo: `geomask` — Spatial Geomasking and Anonymization Tools for R
 
-> **Repositorio:** https://github.com/JDConejeros/spatmask  
+> **Repositorio:** https://github.com/JDConejeros/geomask  
 > **Autor:** José Daniel Conejeros (`jo.conejeros@gmail.com`, ORCID: 0000-0003-3402-4361)  
 > **Versión actual:** 0.0.0.9000 (fase conceptual / early development)  
 > **Licencia:** MIT  
@@ -30,7 +30,7 @@
 
 ## 1. Visión general del paquete
 
-`spatmask` es un marco unificado, reproducible y extensible en R para aplicar, evaluar y documentar estrategias de **geomasking** (enmascaramiento espacial) en datos georreferenciados sensibles. Su objetivo central es reducir el riesgo de reidentificación de individuos a partir de sus coordenadas geográficas, manteniendo al mismo tiempo la utilidad analítica del dataset para investigación epidemiológica, clínica y en ciencias sociales.
+`geomask` es un marco unificado, reproducible y extensible en R para aplicar, evaluar y documentar estrategias de **geomasking** (enmascaramiento espacial) en datos georreferenciados sensibles. Su objetivo central es reducir el riesgo de reidentificación de individuos a partir de sus coordenadas geográficas, manteniendo al mismo tiempo la utilidad analítica del dataset para investigación epidemiológica, clínica y en ciencias sociales.
 
 El paquete trabaja con objetos `sf` (Simple Features) y está diseñado para ser interoperable con el ecosistema espacial moderno de R (`sf`, `terra`, `spdep`).
 
@@ -47,7 +47,7 @@ El paquete trabaja con objetos `sf` (Simple Features) y está diseñado para ser
 ## 2. Estructura del repositorio
 
 ```
-spatmask/
+geomask/
 ├── R/                        # Funciones del paquete
 │   ├── geomasking.R          # Métodos de masking (donut, gaussian, density-aware, etc.)
 │   ├── privacy_metrics.R     # k-anonimato espacial, riesgo de divulgación
@@ -64,7 +64,7 @@ spatmask/
 │   │   └── test-context_aware.R
 │   └── testthat.R
 ├── vignettes/
-│   ├── intro-spatmask.Rmd         # Introducción general
+│   ├── intro-geomask.Rmd         # Introducción general
 │   ├── privacy-utility-tradeoff.Rmd
 │   ├── context-aware-masking.Rmd
 │   └── reproducible-reporting.Rmd
@@ -125,18 +125,18 @@ spatmask/
 
 El paquete debe incluir al menos dos datasets sintéticos para ilustrar los ejemplos y vignettes sin depender de datos sensibles reales.
 
-**`spatmask_pts`** — Puntos sintéticos de casos epidemiológicos:
+**`geomask_pts`** — Puntos sintéticos de casos epidemiológicos:
 - Tipo: `sf` POINT
 - CRS: WGS84 (EPSG:4326) + versión proyectada (UTM)
 - Variables: `id`, `fecha`, `edad_grupo`, `sexo`, `geometry`
 - Fuente: generados con `fabricatr` o similar + shapefile público Chile
 
-**`spatmask_boundary`** — Polígono de límite administrativo de referencia:
+**`geomask_boundary`** — Polígono de límite administrativo de referencia:
 - Tipo: `sf` POLYGON (comunas)
 - CRS: WGS84
 - Fuente: Biblioteca del Congreso Nacional de Chile (datos abiertos)
 
-**`spatmask_pop`** — Grilla de densidad poblacional de referencia:
+**`geomask_pop`** — Grilla de densidad poblacional de referencia:
 - Tipo: `SpatRaster` (terra) o `sf` POLYGON con atributo de densidad
 - Fuente: WorldPop, INE Chile, o generado sintéticamente
 
@@ -533,7 +533,7 @@ Cada función exportada debe tener:
 
 ### Vignettes planificadas
 
-**`intro-spatmask.Rmd`** — Introducción al paquete: motivación, instalación, ejemplo rápido con `spatmask_pts`, comparación visual original vs. enmascarado.
+**`intro-geomask.Rmd`** — Introducción al paquete: motivación, instalación, ejemplo rápido con `geomask_pts`, comparación visual original vs. enmascarado.
 
 **`privacy-utility-tradeoff.Rmd`** — Análisis del trade-off: cómo variar el radio de masking afecta las métricas de privacidad y utilidad. Incluye gráficos de curvas de Pareto.
 
@@ -557,12 +557,12 @@ El `README.md` debe estar disponible en inglés (principal, en el repo) y en esp
 
 ## 8. Flujos de trabajo reproducibles
 
-### Objeto de configuración `spatmask_config`
+### Objeto de configuración `geomask_config`
 
-Considerar una clase S3 `spatmask_config` que encapsule parámetros de masking, semilla, y capa contextual, y pueda serializarse a YAML para reproducibilidad total:
+Considerar una clase S3 `geomask_config` que encapsule parámetros de masking, semilla, y capa contextual, y pueda serializarse a YAML para reproducibilidad total:
 
 ```r
-cfg <- spatmask_config(
+cfg <- geomask_config(
   method   = "donut",
   min_r    = 500,
   max_r    = 2000,
@@ -570,15 +570,15 @@ cfg <- spatmask_config(
   boundary = "path/to/comunas.gpkg"
 )
 # Guardar configuración
-write_spatmask_config(cfg, "masking_config.yml")
+write_geomask_config(cfg, "masking_config.yml")
 # Leer y aplicar
-cfg2 <- read_spatmask_config("masking_config.yml")
+cfg2 <- read_geomask_config("masking_config.yml")
 masked <- apply_mask(data, cfg2)
 ```
 
 ### Plantilla de reporte
 
-Incluir una plantilla R Markdown (`spatmask_report_template.Rmd`) que genere automáticamente:
+Incluir una plantilla R Markdown (`geomask_report_template.Rmd`) que genere automáticamente:
 - Resumen de parámetros
 - Tabla de métricas de privacidad y utilidad
 - Mapas comparativos
@@ -645,7 +645,7 @@ El proceso de revisión por pares de rOpenSci requiere:
 
 - [ ] Completar `DESCRIPTION` con dependencias definitivas (`Imports`)
 - [ ] Configurar `testthat` con `usethis::use_testthat()`
-- [ ] Crear datasets sintéticos (`spatmask_pts`, `spatmask_boundary`) y scripts en `data-raw/`
+- [ ] Crear datasets sintéticos (`geomask_pts`, `geomask_boundary`) y scripts en `data-raw/`
 - [ ] Implementar `mask_random_perturbation()` con documentación roxygen2 y tests básicos
 - [ ] Configurar GitHub Actions: `R-CMD-check.yaml`
 - [ ] Asegurar que `devtools::check()` pasa sin errores ni warnings en Linux
@@ -678,7 +678,7 @@ El proceso de revisión por pares de rOpenSci requiere:
 - [ ] Implementar `mask_location_swapping()` con restricciones contextuales
 - [ ] Implementar `mask_context_aware()` con lógica de re-muestreo y zonas prohibidas
 - [ ] Tests para `mask_context_aware()`: verificar que ningún punto cae fuera del límite
-- [ ] Iniciar `vignette/intro-spatmask.Rmd`
+- [ ] Iniciar `vignette/intro-geomask.Rmd`
 - [ ] Reunión de cohorte rOpenSci: presentar avance
 
 ---
@@ -716,9 +716,9 @@ El proceso de revisión por pares de rOpenSci requiere:
 ### Enero 2026 — Reporte reproducible y objeto de configuración
 
 - [ ] Implementar `mask_report()` con output estructurado
-- [ ] Diseñar y documentar clase S3 `spatmask_config`
-- [ ] Implementar `write_spatmask_config()` y `read_spatmask_config()` (YAML)
-- [ ] Crear plantilla R Markdown de reporte (`spatmask_report_template.Rmd`)
+- [ ] Diseñar y documentar clase S3 `geomask_config`
+- [ ] Implementar `write_geomask_config()` y `read_geomask_config()` (YAML)
+- [ ] Crear plantilla R Markdown de reporte (`geomask_report_template.Rmd`)
 - [ ] Vignette `reproducible-reporting.Rmd`: primera versión completa
 - [ ] Cobertura de tests ≥ 80%
 
@@ -752,7 +752,7 @@ El proceso de revisión por pares de rOpenSci requiere:
 - [ ] Submisión formal a rOpenSci (abrir issue en `ropensci/software-review`)
 - [ ] Presentación en LatinR 2026
 - [ ] Publicar blog post en rOpenSci (borrador)
-- [ ] Taller en SENTINET: flujos reproducibles con `spatmask`
+- [ ] Taller en SENTINET: flujos reproducibles con `geomask`
 
 ---
 
@@ -800,7 +800,7 @@ El proceso de revisión por pares de rOpenSci requiere:
 
 - [ ] Completar tramitación CRAN (si no completada en julio)
 - [ ] Traducir README, vignette principal y cheatsheet al inglés con revisión nativa
-- [ ] Añadir `spatmask` a CRAN Task View: Spatial, Epidemiology
+- [ ] Añadir `geomask` a CRAN Task View: Spatial, Epidemiology
 - [ ] Contactar con RECON (R Epidemics Consortium) para inclusión en recursos recomendados
 - [ ] Identificar potenciales colaboradores internacionales (GitHub issues, Twitter/Mastodon)
 
@@ -871,7 +871,7 @@ El proceso de revisión por pares de rOpenSci requiere:
 - [ ] Plan de mantenimiento a largo plazo (releases semestrales, triage de issues)
 - [ ] Identificar posibles contribuidores para mantener el paquete activo
 - [ ] Documentar lecciones aprendidas sobre desarrollo de paquetes en contexto latinoamericano
-- [ ] **Meta final**: `spatmask` en CRAN, revisado por rOpenSci, con artículo de software publicado, sitio web activo, comunidad de usuarios hispanohablantes y anglohablantes establecida.
+- [ ] **Meta final**: `geomask` en CRAN, revisado por rOpenSci, con artículo de software publicado, sitio web activo, comunidad de usuarios hispanohablantes y anglohablantes establecida.
 
 ---
 
