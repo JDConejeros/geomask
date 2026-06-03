@@ -1,9 +1,9 @@
 # Plan de Trabajo: `geomask` — Spatial Geomasking and Anonymization Tools for R
 
-> **Repositorio:** https://github.com/JDConejeros/geomask  
-> **Autor:** José Daniel Conejeros (`jo.conejeros@gmail.com`, ORCID: 0000-0003-3402-4361)  
-> **Versión actual:** 0.0.0.9000 (fase conceptual / early development)  
-> **Licencia:** MIT  
+> **Repositorio:** https://github.com/JDConejeros/geomask
+> **Autor:** José Daniel Conejeros (`jo.conejeros@gmail.com`, ORCID: 0000-0003-3402-4361)
+> **Versión actual:** 0.0.0.9000 (fase conceptual / early development)
+> **Licencia:** MIT
 > **Horizonte:** Junio 2025 – Abril 2027
 
 ---
@@ -89,28 +89,28 @@ geomask/
 
 ### Dependencias principales (`Imports`)
 
-| Paquete | Rol |
-|---------|-----|
-| `sf` | Manipulación de geometrías espaciales (puntos, polígonos, CRS) |
-| `units` | Manejo de unidades métricas para distancias de desplazamiento |
-| `dplyr` | Manipulación de atributos en tablas de `sf` |
-| `rlang` | Programación defensiva con NSE |
-| `cli` | Mensajes de error/advertencia con formato |
+| Paquete   | Rol                                                               |
+| --------- | ----------------------------------------------------------------- |
+| `sf`    | Manipulación de geometrías espaciales (puntos, polígonos, CRS) |
+| `units` | Manejo de unidades métricas para distancias de desplazamiento    |
+| `dplyr` | Manipulación de atributos en tablas de `sf`                    |
+| `rlang` | Programación defensiva con NSE                                   |
+| `cli`   | Mensajes de error/advertencia con formato                         |
 
 ### Dependencias sugeridas (`Suggests`)
 
-| Paquete | Rol |
-|---------|-----|
-| `testthat (>= 3.0.0)` | Testing unitario |
-| `roxygen2` | Generación de documentación |
-| `knitr` | Compilación de vignettes |
-| `rmarkdown` | Renderización de vignettes |
-| `pkgdown` | Sitio web de documentación |
-| `spdep` | Estadísticas espaciales para evaluación de utilidad |
-| `spatstat` | Análisis de patrones de puntos (utilidad) |
-| `terra` | Interoperabilidad con rasters (contexto poblacional) |
-| `ggplot2` | Visualización en vignettes |
-| `tmap` | Mapas comparativos original/enmascarado |
+| Paquete                 | Rol                                                   |
+| ----------------------- | ----------------------------------------------------- |
+| `testthat (>= 3.0.0)` | Testing unitario                                      |
+| `roxygen2`            | Generación de documentación                         |
+| `knitr`               | Compilación de vignettes                             |
+| `rmarkdown`           | Renderización de vignettes                           |
+| `pkgdown`             | Sitio web de documentación                           |
+| `spdep`               | Estadísticas espaciales para evaluación de utilidad |
+| `spatstat`            | Análisis de patrones de puntos (utilidad)            |
+| `terra`               | Interoperabilidad con rasters (contexto poblacional)  |
+| `ggplot2`             | Visualización en vignettes                           |
+| `tmap`                | Mapas comparativos original/enmascarado               |
 
 ### Dependencias del sistema
 
@@ -126,17 +126,20 @@ geomask/
 El paquete debe incluir al menos dos datasets sintéticos para ilustrar los ejemplos y vignettes sin depender de datos sensibles reales.
 
 **`geomask_pts`** — Puntos sintéticos de casos epidemiológicos:
+
 - Tipo: `sf` POINT
 - CRS: WGS84 (EPSG:4326) + versión proyectada (UTM)
 - Variables: `id`, `fecha`, `edad_grupo`, `sexo`, `geometry`
 - Fuente: generados con `fabricatr` o similar + shapefile público Chile
 
 **`geomask_boundary`** — Polígono de límite administrativo de referencia:
+
 - Tipo: `sf` POLYGON (comunas)
 - CRS: WGS84
 - Fuente: Biblioteca del Congreso Nacional de Chile (datos abiertos)
 
 **`geomask_pop`** — Grilla de densidad poblacional de referencia:
+
 - Tipo: `SpatRaster` (terra) o `sf` POLYGON con atributo de densidad
 - Fuente: WorldPop, INE Chile, o generado sintéticamente
 
@@ -160,14 +163,22 @@ Todo dato interno debe tener su script de reproducción en `data-raw/` para gara
 
 Sea $\mathbf{p}_i = (x_i, y_i)$ la ubicación original del individuo $i$. Se generan:
 
-$$\theta_i \sim \text{Uniform}(0, 2\pi)$$
-$$r_i \sim \text{Uniform}(0, r_{\max})$$
+$$
+\theta_i \sim \text{Uniform}(0, 2\pi)
+$$
+
+$$
+r_i \sim \text{Uniform}(0, r_{\max})
+$$
 
 La ubicación enmascarada es:
 
-$$\mathbf{p}_i^* = \left(x_i + r_i \cos\theta_i,\; y_i + r_i \sin\theta_i\right)$$
+$$
+\mathbf{p}_i^* = \left(x_i + r_i \cos\theta_i,\; y_i + r_i \sin\theta_i\right)
+$$
 
 **Argumentos:**
+
 - `data`: objeto `sf` con geometría POINT
 - `max_r`: radio máximo de desplazamiento (en metros si CRS proyectado)
 - `seed`: semilla para reproducibilidad
@@ -182,14 +193,22 @@ $$\mathbf{p}_i^* = \left(x_i + r_i \cos\theta_i,\; y_i + r_i \sin\theta_i\right)
 
 **Formulación matemática:**
 
-$$\theta_i \sim \text{Uniform}(0, 2\pi)$$
-$$r_i \sim \text{Uniform}(r_{\min}, r_{\max})$$
+$$
+\theta_i \sim \text{Uniform}(0, 2\pi)
+$$
 
-$$\mathbf{p}_i^* = \left(x_i + r_i \cos\theta_i,\; y_i + r_i \sin\theta_i\right)$$
+$$
+r_i \sim \text{Uniform}(r_{\min}, r_{\max})
+$$
+
+$$
+\mathbf{p}_i^* = \left(x_i + r_i \cos\theta_i,\; y_i + r_i \sin\theta_i\right)
+$$
 
 con la restricción $r_{\min} < r_i \leq r_{\max}$.
 
 **Argumentos:**
+
 - `data`: objeto `sf` POINT
 - `min_r`: radio mínimo (distancia de protección garantizada)
 - `max_r`: radio máximo
@@ -205,17 +224,24 @@ con la restricción $r_{\min} < r_i \leq r_{\max}$.
 
 **Formulación matemática:**
 
-$$\Delta x_i \sim \mathcal{N}(0, \sigma^2), \quad \Delta y_i \sim \mathcal{N}(0, \sigma^2)$$
+$$
+\Delta x_i \sim \mathcal{N}(0, \sigma^2), \quad \Delta y_i \sim \mathcal{N}(0, \sigma^2)
+$$
 
-$$\mathbf{p}_i^* = (x_i + \Delta x_i,\; y_i + \Delta y_i)$$
+$$
+\mathbf{p}_i^* = (x_i + \Delta x_i,\; y_i + \Delta y_i)
+$$
 
 La distancia de desplazamiento sigue una distribución de Rayleigh con parámetro $\sigma$:
 
-$$r_i = \sqrt{\Delta x_i^2 + \Delta y_i^2} \sim \text{Rayleigh}(\sigma)$$
+$$
+r_i = \sqrt{\Delta x_i^2 + \Delta y_i^2} \sim \text{Rayleigh}(\sigma)
+$$
 
 con valor esperado $\mathbb{E}[r_i] = \sigma\sqrt{\pi/2}$.
 
 **Argumentos:**
+
 - `data`: objeto `sf` POINT
 - `sigma`: desviación estándar del desplazamiento (en metros si CRS proyectado)
 - `seed`: semilla
@@ -232,19 +258,26 @@ con valor esperado $\mathbb{E}[r_i] = \sigma\sqrt{\pi/2}$.
 
 Sea $\rho(\mathbf{p}_i)$ la densidad poblacional en la ubicación $\mathbf{p}_i$ (obtenida de una grilla de referencia). Se define una función de escala:
 
-$$s_i = f\!\left(\frac{\rho(\mathbf{p}_i)}{\bar{\rho}}\right)$$
+$$
+s_i = f\!\left(\frac{\rho(\mathbf{p}_i)}{\bar{\rho}}\right)
+$$
 
 donde $f(\cdot)$ es una función monótona creciente, por ejemplo:
 
-$$s_i = s_{\min} + (s_{\max} - s_{\min}) \cdot \Phi\!\left(\frac{\log\rho(\mathbf{p}_i) - \mu_\rho}{\sigma_\rho}\right)$$
+$$
+s_i = s_{\min} + (s_{\max} - s_{\min}) \cdot \Phi\!\left(\frac{\log\rho(\mathbf{p}_i) - \mu_\rho}{\sigma_\rho}\right)
+$$
 
 con $\Phi$ la CDF normal estándar aplicada a los log-densidades estandarizados.
 
 El desplazamiento se aplica dentro de un donut con radio escalado:
 
-$$r_{\max,i} = r_{\text{base}} \cdot s_i, \quad r_{\min,i} = r_{\min,\text{base}} \cdot s_i$$
+$$
+r_{\max,i} = r_{\text{base}} \cdot s_i, \quad r_{\min,i} = r_{\min,\text{base}} \cdot s_i
+$$
 
 **Argumentos:**
+
 - `data`: objeto `sf` POINT
 - `pop_layer`: raster o polígonos con densidad poblacional
 - `r_base`: radio base de desplazamiento
@@ -267,11 +300,14 @@ Dado un conjunto de zonas $\{Z_1, \ldots, Z_m\}$ con conteos $n_j = |\{\mathbf{p
 
 El punto enmascarado $\mathbf{p}_i^*$ se reemplaza por el centroide ponderado de la zona resultante $Z_j^*$:
 
-$$\mathbf{p}_i^* = \frac{1}{n_j} \sum_{\mathbf{p}_\ell \in Z_j^*} \mathbf{p}_\ell$$
+$$
+\mathbf{p}_i^* = \frac{1}{n_j} \sum_{\mathbf{p}_\ell \in Z_j^*} \mathbf{p}_\ell
+$$
 
 o bien se utiliza el centroide geográfico de $Z_j^*$.
 
 **Argumentos:**
+
 - `data`: objeto `sf` POINT
 - `zones`: objeto `sf` POLYGON con las zonas base
 - `k`: umbral mínimo de individuos por zona
@@ -287,15 +323,20 @@ o bien se utiliza el centroide geográfico de $Z_j^*$.
 
 Sea $\mathcal{G} = \{G_1, \ldots, G_L\}$ una partición de los individuos según variables contextuales (e.g., comuna × grupo etario). Para cada grupo $G_\ell$, se genera una permutación aleatoria $\pi_\ell$ de los índices dentro del grupo, de modo que el individuo $i$ recibe la ubicación del individuo $\pi_\ell(i)$:
 
-$$\mathbf{p}_i^* = \mathbf{p}_{\pi_\ell(i)}$$
+$$
+\mathbf{p}_i^* = \mathbf{p}_{\pi_\ell(i)}
+$$
 
 con la restricción de que $\pi_\ell(i) \neq i$ para todo $i$ (no self-swap), y adicionalmente se puede imponer:
 
-$$d(\mathbf{p}_i, \mathbf{p}_{\pi_\ell(i)}) \geq d_{\min}$$
+$$
+d(\mathbf{p}_i, \mathbf{p}_{\pi_\ell(i)}) \geq d_{\min}
+$$
 
 donde $d(\cdot,\cdot)$ es la distancia euclidiana o geodésica.
 
 **Argumentos:**
+
 - `data`: objeto `sf` POINT
 - `context_vars`: nombres de columnas que definen los grupos de swap
 - `min_dist`: distancia mínima de swap
@@ -313,15 +354,20 @@ donde $d(\cdot,\cdot)$ es la distancia euclidiana o geodésica.
 
 **Formulación matemática:**
 
-$$k_i(r) = \left|\left\{j \neq i : d(\mathbf{p}_i^*, \mathbf{p}_j^*) \leq r\right\}\right| + 1$$
+$$
+k_i(r) =\bigl|{j \neq i :d(\mathbf{p}_i^{*}, \mathbf{p}_j^{*})\le r}\bigr|+1
+$$
 
 El k-anonimato global del dataset se define como:
 
-$$K(r) = \min_i k_i(r)$$
+$$
+K(r) = \min_i k_i(r)
+$$
 
 Un dataset cumple $k$-anonimato espacial con radio $r$ si $K(r) \geq k$.
 
 **Argumentos:**
+
 - `masked`: objeto `sf` POINT enmascarado
 - `r`: radio de vecindad (en metros)
 - `return_individual`: lógico, si se retorna $k_i$ para cada punto
@@ -338,19 +384,26 @@ Un dataset cumple $k$-anonimato espacial con radio $r$ si $K(r) \geq k$.
 
 **Modelo de adversario simple (nearest neighbor):**
 
-$$\text{RD}_i = \mathbb{1}\!\left[d(\mathbf{p}_i^*, \mathbf{p}_i) = \min_{j} d(\mathbf{p}_i^*, \mathbf{p}_j)\right]$$
+$$
+\text{RD}_i =\mathbb{1}\!\left[d(\mathbf{p}_i^{*},\mathbf{p}_i)=\min_jd(\mathbf{p}_i^{*},\mathbf{p}_j)\right]
+$$
 
 El riesgo agregado es:
 
-$$\overline{\text{RD}} = \frac{1}{n} \sum_{i=1}^n \text{RD}_i$$
+$$
+\overline{\text{RD}} = \frac{1}{n} \sum_{i=1}^n \text{RD}_i
+$$
 
 **Modelo de adversario probabilístico:**
 
-$$\text{RD}_i^{\text{prob}} = \frac{\exp(-d(\mathbf{p}_i^*, \mathbf{p}_i)/h)}{\sum_{j=1}^n \exp(-d(\mathbf{p}_i^*, \mathbf{p}_j)/h)}$$
+$$
+\text{RD}_i^{\text{prob}}=\frac{\exp\!\left(-d(\mathbf{p}_i^{*},\mathbf{p}_i)/h\right)}{\sum_{j=1}^{n}\exp\!\left(-d(\mathbf{p}_i^{*},\mathbf{p}_j)/h\right)}
+$$
 
 con $h$ un parámetro de ancho de banda que modela la incertidumbre del adversario.
 
 **Argumentos:**
+
 - `original`: objeto `sf` POINT original
 - `masked`: objeto `sf` POINT enmascarado
 - `method`: `"nn"` (nearest-neighbor) o `"prob"` (probabilístico)
@@ -370,21 +423,30 @@ con $h$ un parámetro de ancho de banda que modela la incertidumbre del adversar
 
 **Distancia al vecino más cercano (NND):**
 
-$$\text{NND}_i = \min_{j \neq i} d(\mathbf{p}_i, \mathbf{p}_j)$$
+$$
+\text{NND}_i = \min_{j \neq i} d(\mathbf{p}_i, \mathbf{p}_j)
+$$
 
 Se comparan los vectores $\{\text{NND}_i^{\text{orig}}\}$ y $\{\text{NND}_i^{\text{mask}}\}$ mediante la estadística de Kolmogorov-Smirnov:
 
-$$D_{KS} = \sup_x \left|F_{\text{orig}}(x) - F_{\text{mask}}(x)\right|$$
+$$
+D_{KS} = \sup_x \left|F_{\text{orig}}(x) - F_{\text{mask}}(x)\right|
+$$
 
 **Función K de Ripley:**
 
-$$\hat{K}(r) = \frac{|A|}{n(n-1)} \sum_{i \neq j} \mathbb{1}[d(\mathbf{p}_i, \mathbf{p}_j) \leq r] \cdot w_{ij}$$
+$$
+\hat{K}(r) = \frac{|A|}{n(n-1)} \sum_{i \neq j} \mathbb{1}[d(\mathbf{p}_i, \mathbf{p}_j) \leq r] \cdot w_{ij}
+$$
 
 donde $|A|$ es el área del dominio de estudio y $w_{ij}$ es una corrección de borde. Se calcula para datos originales y enmascarados y se reporta la discrepancia integrada:
 
-$$\Delta K = \int_0^{r_{\max}} \left|\hat{K}_{\text{orig}}(r) - \hat{K}_{\text{mask}}(r)\right| dr$$
+$$
+\Delta K = \int_0^{r_{\max}} \left|\hat{K}_{\text{orig}}(r) - \hat{K}_{\text{mask}}(r)\right| dr
+$$
 
 **Argumentos:**
+
 - `original`: objeto `sf` POINT original
 - `masked`: objeto `sf` POINT enmascarado
 - `metrics`: vector de métricas a calcular (`"nnd"`, `"ripley_k"`, `"moran"`, etc.)
@@ -400,7 +462,9 @@ $$\Delta K = \int_0^{r_{\max}} \left|\hat{K}_{\text{orig}}(r) - \hat{K}_{\text{m
 
 **Índice de Moran Global:**
 
-$$I = \frac{n}{S_0} \cdot \frac{\sum_i \sum_j w_{ij}(y_i - \bar{y})(y_j - \bar{y})}{\sum_i (y_i - \bar{y})^2}$$
+$$
+I = \frac{n}{S_0} \cdot \frac{\sum_i \sum_j w_{ij}(y_i - \bar{y})(y_j - \bar{y})}{\sum_i (y_i - \bar{y})^2}
+$$
 
 donde $w_{ij}$ son los pesos espaciales, $S_0 = \sum_i \sum_j w_{ij}$, $y_i$ son los conteos en zonas $i$ (calculados a partir de los puntos), y $\bar{y}$ es la media de conteos.
 
@@ -408,11 +472,14 @@ Se reporta $\Delta I = |I_{\text{orig}} - I_{\text{mask}}|$ como indicador de di
 
 **Índice de Moran Local (LISA):**
 
-$$I_i = z_i \sum_j w_{ij} z_j$$
+$$
+I_i = z_i \sum_j w_{ij} z_j
+$$
 
 donde $z_i = (y_i - \bar{y}) / s_y$. Se evalúa la concordancia de clasificaciones HH/LL/HL/LH entre datos originales y enmascarados.
 
 **Argumentos:**
+
 - `original`: objeto `sf` POINT o POLYGON
 - `masked`: objeto `sf` POINT o POLYGON
 - `zones`: polígonos para calcular conteos
@@ -425,6 +492,7 @@ donde $z_i = (y_i - \bar{y}) / s_y$. Se evalúa la concordancia de clasificacion
 **Descripción:** Calcula y compara estadísticas relevantes para epidemiología espacial: tasas por zona, suavizamiento espacial, y distribución de distancias a servicios de salud.
 
 **Argumentos:**
+
 - `original`: objeto `sf` POINT
 - `masked`: objeto `sf` POINT
 - `zones`: `sf` POLYGON con población de referencia
@@ -449,6 +517,7 @@ Función wrapper que calcula todas las métricas de utilidad relevantes de una v
 **Lógica:** Aplica el método de masking elegido y, si el punto enmascarado cae en zona prohibida, re-muestrea hasta obtener una ubicación válida o hasta agotar `max_iter` intentos.
 
 **Argumentos:**
+
 - `data`: objeto `sf` POINT
 - `method`: función de masking a aplicar (`"donut"`, `"gaussian"`, etc.)
 - `boundary`: `sf` POLYGON de límite permitido
@@ -464,6 +533,7 @@ Función wrapper que calcula todas las métricas de utilidad relevantes de una v
 **Descripción:** Genera un reporte estructurado (lista o data frame) con los parámetros usados, métricas de privacidad y utilidad, y recomendaciones de citación metodológica. Opcionalmente exporta a PDF/HTML vía `rmarkdown`.
 
 **Output:**
+
 ```r
 list(
   method       = "donut",
@@ -487,6 +557,7 @@ Cada archivo de tests cubre las funciones del archivo `.R` correspondiente.
 **Tipos de tests a implementar:**
 
 **Tests de comportamiento correcto:**
+
 - Verificar que el output es un objeto `sf` con el mismo número de filas que el input.
 - Verificar que el CRS del output coincide con el del input.
 - Verificar que todos los puntos enmascarados cumplen la restricción de distancia (para `mask_donut`: $r_i \geq r_{\min}$ para todos $i$).
@@ -494,6 +565,7 @@ Cada archivo de tests cubre las funciones del archivo `.R` correspondiente.
 - Verificar reproducibilidad: mismos resultados con la misma semilla.
 
 **Tests de casos borde:**
+
 - Input con un solo punto.
 - Input con puntos duplicados.
 - CRS geográfico (grados) vs. proyectado (metros): verificar manejo correcto de unidades.
@@ -501,6 +573,7 @@ Cada archivo de tests cubre las funciones del archivo `.R` correspondiente.
 - Radio mínimo ≥ radio máximo: debe lanzar error.
 
 **Tests de integración:**
+
 - Pipeline completo: masking → privacidad → utilidad → reporte.
 - Interoperabilidad con `terra` para capas contextuales.
 
@@ -523,6 +596,7 @@ Cobertura de tests ≥ 90% de líneas de código para funciones exportadas.
 ### Documentación de funciones (roxygen2)
 
 Cada función exportada debe tener:
+
 - `@title`, `@description`, `@details` (incluyendo referencia matemática)
 - `@param` para cada argumento
 - `@return` describiendo el objeto de salida
@@ -544,6 +618,7 @@ Cada función exportada debe tener:
 ### Sitio web pkgdown
 
 Configurar `_pkgdown.yml` con:
+
 - Navbar: Reference, Vignettes, News, GitHub.
 - Agrupación de funciones por categoría (Masking, Privacy, Utility, Reporting).
 - Tema visual coherente.
@@ -579,6 +654,7 @@ masked <- apply_mask(data, cfg2)
 ### Plantilla de reporte
 
 Incluir una plantilla R Markdown (`geomask_report_template.Rmd`) que genere automáticamente:
+
 - Resumen de parámetros
 - Tabla de métricas de privacidad y utilidad
 - Mapas comparativos
@@ -599,6 +675,7 @@ Incluir una plantilla R Markdown (`geomask_report_template.Rmd`) que genere auto
 ### Materiales de difusión a producir
 
 **Materiales técnicos:**
+
 - Sitio web pkgdown (EN)
 - README bilingüe (EN/ES)
 - 4 vignettes detalladas
@@ -606,12 +683,14 @@ Incluir una plantilla R Markdown (`geomask_report_template.Rmd`) que genere auto
 - Casos de uso reproducibles con datos abiertos (Chile, LATAM)
 
 **Materiales de comunidad:**
+
 - Blog post en rOpenSci (inglés): motivación, diseño, estado del paquete
 - Blog post o artículo en Abre Tu Ciencia (español): masking para investigadores de salud
 - Presentación LatinR (15-20 min): metodología + demo en vivo
 - Taller práctico (2-3 horas): para SENTINET/ATC, incluye casos de uso reproducibles
 
 **Redes y visibilidad:**
+
 - Repositorio GitHub con topics: `r`, `spatial`, `geomasking`, `privacy`, `epidemiology`, `ropensci`
 - ORCID vinculado al paquete
 - Zenodo DOI para cada release estable
