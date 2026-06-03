@@ -385,7 +385,7 @@ Un dataset cumple $k$-anonimato espacial con radio $r$ si $K(r) \geq k$.
 **Modelo de adversario simple (nearest neighbor):**
 
 $$
-\text{RD}_i=\mathbb{1}\!\left[d(\mathbf{p}_i^{*},\mathbf{p}_i)=\min_j d(\mathbf{p}_i^{*},\mathbf{p}_j)\right]
+\text{RD}_i=\mathbf{1}\!\left[d(\mathbf{p}_i^{*},\mathbf{p}_i)=\min_j d(\mathbf{p}_i^{*},\mathbf{p}_j)\right]
 $$
 
 El riesgo agregado es:
