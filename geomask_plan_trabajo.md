@@ -355,7 +355,7 @@ donde $d(\cdot,\cdot)$ es la distancia euclidiana o geodésica.
 **Formulación matemática:**
 
 $$
-k_i(r) =\bigl|{j \neq i :d(\mathbf{p}_i^{*}, \mathbf{p}_j^{*})\le r}\bigr|+1
+k_i(r)=\bigl|\{j\neq i:d(\mathbf{p}_i^{*},\mathbf{p}_j^{*})\le r\}\bigr|+1
 $$
 
 El k-anonimato global del dataset se define como:
