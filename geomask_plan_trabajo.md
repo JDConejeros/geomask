@@ -355,7 +355,7 @@ donde $d(\cdot,\cdot)$ es la distancia euclidiana o geodésica.
 **Formulación matemática:**
 
 $$
-k_i(r)=\#\{j\neq i:d(p_i^*,p_j^*)\le r\}+1
+k_i(r)=\left|\left\{j\neq i:d(({ \mathbf p})_i^{*},({ \mathbf p})_j^{*})\le r\right\}\right|+1
 $$
 
 El k-anonimato global del dataset se define como:
@@ -385,7 +385,7 @@ Un dataset cumple $k$-anonimato espacial con radio $r$ si $K(r) \geq k$.
 **Modelo de adversario simple (nearest neighbor):**
 
 $$
-RD_i=\mathbf{1}\!\left[d(p_i^*,p_i)=\min_j d(p_i^*,p_j)\right]
+\mathrm{RD}_i=\mathbf 1\!\left[d(({ \mathbf p})_i^{*},({ \mathbf p})_i)=\min_j d(({ \mathbf p})_i^{*},({ \mathbf p})_j)\right]
 $$
 
 El riesgo agregado es:
@@ -397,7 +397,7 @@ $$
 **Modelo de adversario probabilístico:**
 
 $$
-RD_i^{prob}=\frac{\exp(-d(p_i^*,p_i)/h)}{\sum_{j=1}^{n}\exp(-d(p_i^*,p_j)/h)}
+\mathrm{RD}_i^{\mathrm{prob}}=\frac{\exp\left(-d(({ \mathbf p})_i^{*},({ \mathbf p})_i)/h\right)}{\sum_{j=1}^{n}\exp\left(-d(({ \mathbf p})_i^{*},({ \mathbf p})_j)/h\right)}
 $$
 
 con $h$ un parámetro de ancho de banda que modela la incertidumbre del adversario.
