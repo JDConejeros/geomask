@@ -1,0 +1,57 @@
+url: https://jdconejeros.github.io/geomask/
+template:
+  bootstrap: 5
+  package: bslib
+  bootswatch: flatly
+authors:
+  José Daniel Conejeros:
+    href: https://jd-conejeros.com/
+navbar:
+  structure:
+    left: [intro, reference, articles, news]
+    right: [search, github]
+  components:
+    intro:
+      text: Get started
+      href: articles/intro-geomask.html
+    articles:
+      text: Articles
+      menu:
+        - text: Introducción
+          href: articles/intro-geomask.html
+        - text: Privacidad-utilidad
+          href: articles/privacy-utility-tradeoff.html
+        - text: Context-aware
+          href: articles/context-aware-masking.html
+        - text: Reporte reproducible
+          href: articles/reproducible-reporting.html
+    github:
+      icon: fab fa-github
+      href: https://github.com/JDConejeros/geomask
+reference:
+  - title: Enmascaramiento
+    desc: Funciones principales de geomasking
+    contents:
+      - starts_with("mask_")
+  - title: Privacidad
+    contents:
+      - starts_with("privacy_")
+  - title: Utilidad
+    contents:
+      - starts_with("utility_")
+  - title: Configuración y reportes
+    contents:
+      - geomask_config
+      - write_geomask_config
+      - read_geomask_config
+      - apply_mask
+      - mask_report
+  - title: Visualización
+    contents:
+      - starts_with("plot_")
+  - title: Datos
+    contents:
+      - geomask_pts
+      - geomask_boundary
+      - geomask_services
+      - geomask_pop
