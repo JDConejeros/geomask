@@ -1,0 +1,46 @@
+Package: geomask
+Title: Spatial Geomasking and Anonymization Tools
+Version: 0.0.0.9000
+Authors@R: c(
+    person("José Daniel", "Conejeros", , "jo.conejeros@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0003-3402-4361"))
+    )
+Description: Herramientas unificadas para aplicar, evaluar y documentar estrategias
+    de geomasking (enmascaramiento espacial) en datos georreferenciados sensibles.
+    Compatible con objetos 'sf' y pensado para investigación en salud pública,
+    epidemiología y ciencias sociales. Incluye métodos clásicos (donut, gaussiano,
+    intercambio contextual), enmascaramiento informado por densidad, agregación
+    adaptativa, anonimización basada en grafos y métricas de privacidad-utilidad.
+License: MIT + file LICENSE
+LazyDataCompression: xz
+URL: https://github.com/JDConejeros/geomask, https://jdconejeros.github.io/geomask/
+BugReports: https://github.com/JDConejeros/geomask/issues
+Encoding: UTF-8
+Language: es
+Roxygen: list(markdown = TRUE)
+Depends: R (>= 4.1.0)
+Imports:
+    cli,
+    dplyr,
+    rlang,
+    sf,
+    stats,
+    units,
+    utils
+Suggests:
+    covr,
+    ggplot2,
+    hexSticker,
+    knitr,
+    pkgdown,
+    rmarkdown,
+    spdep,
+    sysfonts,
+    terra,
+    testthat (>= 3.0.0),
+    tmap,
+    yaml
+Config/testthat/edition: 3
+VignetteBuilder: knitr
+LazyData: true
+Config/roxygen2/version: 8.1.0

@@ -1,0 +1,11 @@
+^RC-ref$
+^\.github$
+^README_ES\.md$
+^\.gitignore$
+^\.DS_Store$
+^.*\.Rproj$
+^\.Rproj\.user$
+^codecov\.yml$
+^data-raw$
+^\.vscode$
+^\.cursor$
