@@ -1,0 +1,66 @@
+---
+title: "Introducción a geomask"
+author: "José Daniel Conejeros"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introducción a geomask}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 5
+)
+```
+
+## Motivación
+
+El paquete **geomask** implementa geomasking reproducible para datos puntuales sensibles en salud pública y ciencias sociales. Los ejemplos usan datos sintéticos de la Región Metropolitana (`geomask_pts`).
+
+```{r load}
+library(geomask)
+library(sf)
+data(geomask_pts)
+data(geomask_boundary)
+```
+
+## Enmascaramiento donut
+
+```{r donut}
+set.seed(42)
+masked <- mask_donut(geomask_pts, min_r = 400, max_r = 1200, seed = 42)
+if (requireNamespace("ggplot2", quietly = TRUE)) {
+  print(plot_mask_comparison(geomask_pts, masked, boundary = geomask_boundary))
+  print(plot_displacement_distribution(masked))
+}
+```
+
+## Comparación rápida de métodos
+
+```{r methods}
+m_rand <- mask_random_perturbation(geomask_pts, max_r = 1000, seed = 1)
+m_gauss <- mask_gaussian(geomask_pts, sigma = 450, seed = 2)
+m_graph <- mask_graph_k_component(geomask_pts, k = 6, knn = 10, seed = 3)
+c(
+  donut = median(masked$geomask_displacement_m),
+  random = median(m_rand$geomask_displacement_m),
+  gaussian = median(m_gauss$geomask_displacement_m),
+  graph = median(m_graph$geomask_displacement_m)
+)
+```
+
+## Reporte
+
+```{r report}
+mask_report(
+  geomask_pts,
+  masked,
+  method = "donut",
+  parameters = list(min_r = 400, max_r = 1200, seed = 42)
+)
+```

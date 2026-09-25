@@ -1,0 +1,47 @@
+---
+title: "Trade-off privacidad-utilidad"
+author: "José Daniel Conejeros"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Trade-off privacidad-utilidad}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.width = 7, fig.height = 4.5)
+```
+
+```{r}
+library(geomask)
+data(geomask_pts)
+radii <- seq(300, 2000, by = 300)
+res <- lapply(radii, function(r) {
+  m <- mask_donut(geomask_pts, min_r = r * 0.3, max_r = r, seed = 1)
+  list(
+    r = r,
+    k = privacy_k_anonymity(m, r = 500)$k_global,
+    risk = privacy_disclosure_risk(geomask_pts, m)$risk_mean,
+    lpm = privacy_location_protection(geomask_pts, m, d_min = r * 0.3, r = 500, k_target = 3)$lpm,
+    ks = utility_spatial_stats(geomask_pts, m)$nnd$ks_statistic
+  )
+})
+df <- do.call(rbind, lapply(res, as.data.frame))
+```
+
+```{r plot, eval=requireNamespace("ggplot2", quietly = TRUE)}
+library(ggplot2)
+ggplot(df, aes(x = r, y = k)) +
+  geom_line(color = "#2166AC") +
+  geom_point() +
+  labs(title = "k-anonimato vs radio de masking", x = "max_r (m)", y = "k mínimo (r=500m)") +
+  theme_minimal()
+ggplot(df, aes(x = risk, y = ks)) +
+  geom_path(color = "#B2182B") +
+  geom_point(aes(color = r)) +
+  labs(title = "Curva riesgo-utilidad (KS NND)", x = "Riesgo NN", y = "KS NND") +
+  theme_minimal()
+```
+
+La **LPM** (*Location Protection Metric*) combina desplazamiento mínimo y k-anonimato local; valores cercanos a 1 indican mejor protección operacional.

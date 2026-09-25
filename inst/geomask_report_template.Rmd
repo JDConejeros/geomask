@@ -1,0 +1,62 @@
+---
+title: "Reporte de geomasking"
+author: "`r Sys.getenv('USER', 'analista')`"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+params:
+  original: NULL
+  masked: NULL
+  method: "donut"
+  parameters: !expr list()
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+library(geomask)
+library(sf)
+original <- params$original
+masked <- params$masked
+if (is.null(original) || is.null(masked)) {
+  data(geomask_pts)
+  data(geomask_boundary)
+  original <- geomask_pts
+  masked <- mask_donut(geomask_pts, 400, 1000, seed = 1)
+}
+rep <- mask_report(original, masked, method = params$method, parameters = params$parameters)
+```
+
+## Parámetros
+
+```{r}
+knitr::kable(data.frame(
+  param = names(rep$parameters),
+  value = unlist(rep$parameters)
+))
+```
+
+## Métricas
+
+```{r}
+knitr::kable(data.frame(
+  metric = c("k-anonimato", "Riesgo NN", "LPM", "KS NND", "Delta K"),
+  value = c(
+    rep$privacy$k_anonymity,
+    rep$privacy$disclosure_risk,
+    rep$privacy$location_protection,
+    rep$utility$ks_nnd,
+    rep$utility$delta_ripley_k
+  )
+))
+```
+
+## Mapa
+
+```{r fig.width=8, fig.height=5, eval=requireNamespace("ggplot2", quietly = TRUE)}
+print(plot_mask_comparison(original, masked))
+```
+
+## Texto sugerido (Métodos)
+
+`r rep$citation_text`

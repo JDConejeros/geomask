@@ -1,0 +1,66 @@
+---
+title: "Geomasking context-aware (Santiago RM)"
+author: "José Daniel Conejeros"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Geomasking context-aware}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+```{r}
+library(geomask)
+data(geomask_pts)
+data(geomask_boundary)
+data(geomask_pop)
+```
+
+## Desplazamiento según densidad
+
+```{r density}
+masked_den <- mask_density_displacement(
+  geomask_pts,
+  pop_layer = geomask_pop,
+  density_col = "density",
+  r_base = 1200,
+  r_min_base = 250,
+  scale_fun = "logistic",
+  seed = 10
+)
+summary(masked_den$geomask_density_scale)
+```
+
+## Restricción por límite administrativo
+
+```{r context, fig.width=7, fig.height=5}
+masked_ctx <- mask_context_aware(
+  geomask_pts,
+  method = mask_donut,
+  boundary = geomask_boundary,
+  min_r = 300,
+  max_r = 900,
+  seed = 11
+)
+if (requireNamespace("ggplot2", quietly = TRUE)) {
+  print(plot_mask_comparison(geomask_pts, masked_ctx, boundary = geomask_boundary,
+                             title = "Context-aware donut"))
+}
+```
+
+## Agregación adaptativa por comuna
+
+```{r agg}
+masked_agg <- mask_adaptive_aggregation(
+  geomask_pts,
+  zones = geomask_boundary,
+  zone_id = "zone_id",
+  k = 8,
+  merge_method = "centroid_dist"
+)
+nrow(masked_agg)
+```

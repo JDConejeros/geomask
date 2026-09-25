@@ -1,0 +1,51 @@
+---
+title: "Reporte reproducible con geomask"
+author: "José Daniel Conejeros"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Reporte reproducible}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+```{r}
+library(geomask)
+data(geomask_pts)
+data(geomask_boundary)
+```
+
+## Configuración YAML
+
+```{r config, eval=requireNamespace("yaml", quietly = TRUE)}
+cfg <- geomask_config(
+  method = "donut",
+  params = list(min_r = 350, max_r = 1100),
+  seed = 2026,
+  boundary = geomask_boundary
+)
+tmp <- tempfile(fileext = ".yml")
+write_geomask_config(cfg, tmp)
+cfg2 <- read_geomask_config(tmp)
+masked <- apply_mask(geomask_pts, cfg2)
+```
+
+## Reporte para métodos
+
+```{r report}
+rep <- mask_report(
+  geomask_pts,
+  masked,
+  method = cfg$method,
+  parameters = cfg$params
+)
+rep$citation_text
+rep$privacy
+rep$utility
+```
+
+Use `inst/geomask_report_template.Rmd` para generar HTML/PDF con mapas y tablas.
