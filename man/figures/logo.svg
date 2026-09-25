@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="330" height="380" viewBox="0 0 330 380">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4393C3"/>
+      <stop offset="100%" style="stop-color:#2166AC"/>
+    </linearGradient>
+  </defs>
+  <polygon points="165,10 310,95 310,265 165,350 20,265 20,95" fill="#F7F7F7" stroke="#2166AC" stroke-width="8"/>
+  <circle cx="165" cy="175" r="70" fill="url(#g)" opacity="0.85"/>
+  <circle cx="130" cy="155" r="10" fill="#2166AC"/>
+  <circle cx="195" cy="160" r="10" fill="#B2182B"/>
+  <circle cx="170" cy="205" r="10" fill="#B2182B"/>
+  <line x1="130" y1="155" x2="170" y2="205" stroke="#F4A582" stroke-width="5"/>
+  <text x="165" y="300" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="42" font-weight="700" fill="#1B7837">geomask</text>
+</svg>
